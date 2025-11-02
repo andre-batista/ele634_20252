@@ -2,7 +2,7 @@ from dados import Dados, carrega_dados_json
 from solucao import Solucao
 import numpy as np
 
-dados = carrega_dados_json("./dados/pequena.json")
+dados = carrega_dados_json("./dados/media.json")
 solucao = Solucao()
 
 ordem_requisicoes = np.argsort(dados.l) + 1
@@ -40,8 +40,8 @@ for k in K:
             chegada_na_requisicao = t + tempo_ate_requisicao
             duracao_de_viagem_em_caso_de_volta_para_garagem = duracao_viagem + tempo_ate_requisicao + dados.s[ordem_requisicoes] + dados.T[ordem_requisicoes, 0]
             for j in range(len(duracao_de_viagem_em_caso_de_volta_para_garagem)):
-                if duracao_viagem + tempo_ate_requisicao[j] <= dados.e[ordem_requisicoes[j]-1]:
-                    duracao_de_viagem_em_caso_de_volta_para_garagem[j] = dados.e[ordem_requisicoes[j]-1] + dados.s[ordem_requisicoes[j]] + dados.T[ordem_requisicoes[j], 0]
+                if t + tempo_ate_requisicao[j] <= dados.e[ordem_requisicoes[j]-1] and i != 0:
+                    duracao_de_viagem_em_caso_de_volta_para_garagem[j] = duracao_viagem + (dados.e[ordem_requisicoes[j]-1] - t) + dados.s[ordem_requisicoes[j]] + dados.T[ordem_requisicoes[j], 0]
 
 
             # Eu tenho que escolher uma requisição que:
@@ -69,11 +69,13 @@ for k in K:
                     uma_requisicao_foi_atendida = True
                     numero_requisicoes_nao_atendidas -= 1
                     break
-                elif j == ordem_requisicoes.size - 1:
+                elif j == ordem_requisicoes.size - 1 and uma_requisicao_foi_atendida:
                     cabe_mais_requisicoes = False
                     rota.append(0)
                     t += dados.T[rota[-1], 0] + dados.s[rota[-1]]
                     chegada.append(float(t))
+                elif j == ordem_requisicoes.size - 1 and not uma_requisicao_foi_atendida:
+                    cabe_mais_requisicoes = False
         
             if numero_requisicoes_nao_atendidas == 0:
                 t += dados.T[rota[-1], 0] + dados.s[rota[-1]]
