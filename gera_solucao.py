@@ -40,9 +40,17 @@ for k in K:
             chegada_na_requisicao = t + tempo_ate_requisicao
             duracao_de_viagem_em_caso_de_volta_para_garagem = duracao_viagem + tempo_ate_requisicao + dados.s[ordem_requisicoes] + dados.T[ordem_requisicoes, 0]
             for j in range(len(duracao_de_viagem_em_caso_de_volta_para_garagem)):
-                if t + tempo_ate_requisicao[j] <= dados.e[ordem_requisicoes[j]-1] and i != 0:
-                    duracao_de_viagem_em_caso_de_volta_para_garagem[j] = duracao_viagem + (dados.e[ordem_requisicoes[j]-1] - t) + dados.s[ordem_requisicoes[j]] + dados.T[ordem_requisicoes[j], 0]
+                if chegada_na_requisicao[j] <= dados.e[ordem_requisicoes[j]-1]:
+                    if i != 0:
+                        duracao_de_viagem_em_caso_de_volta_para_garagem[j] = duracao_viagem + (dados.e[ordem_requisicoes[j]-1] - t) + dados.s[ordem_requisicoes[j]] + dados.T[ordem_requisicoes[j], 0]
+                        chegada_na_requisicao[j] = dados.e[ordem_requisicoes[j]-1]
+                    else:
+                        duracao_de_viagem_em_caso_de_volta_para_garagem[j] = tempo_ate_requisicao[j] + dados.s[ordem_requisicoes[j]] + dados.T[ordem_requisicoes[j], 0]
+                        chegada_na_requisicao[j] = dados.e[ordem_requisicoes[j]-1]
 
+
+            if v == 1 and k == 2 and duracao_viagem > 150:
+                print("debug")
 
             # Eu tenho que escolher uma requisição que:
             # 1. Ainda não foi atendida
