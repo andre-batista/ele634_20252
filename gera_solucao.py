@@ -37,25 +37,22 @@ for k in K:
         while cabe_mais_requisicoes:
 
             tempo_ate_requisicao = dados.s[rota[-1]] + dados.T[rota[-1], ordem_requisicoes]
-            chegada_na_requisicao = t + tempo_ate_requisicao
-            duracao_de_viagem_em_caso_de_volta_para_garagem = duracao_viagem + tempo_ate_requisicao + dados.s[ordem_requisicoes] + dados.T[ordem_requisicoes, 0]
-            for j in range(len(duracao_de_viagem_em_caso_de_volta_para_garagem)):
-                if chegada_na_requisicao[j] <= dados.e[ordem_requisicoes[j]-1]:
-                    if i != 0:
-                        duracao_de_viagem_em_caso_de_volta_para_garagem[j] = duracao_viagem + (dados.e[ordem_requisicoes[j]-1] - t) + dados.s[ordem_requisicoes[j]] + dados.T[ordem_requisicoes[j], 0]
-                        chegada_na_requisicao[j] = dados.e[ordem_requisicoes[j]-1]
-                    else:
-                        duracao_de_viagem_em_caso_de_volta_para_garagem[j] = tempo_ate_requisicao[j] + dados.s[ordem_requisicoes[j]] + dados.T[ordem_requisicoes[j], 0]
-                        chegada_na_requisicao[j] = dados.e[ordem_requisicoes[j]-1]
 
+            chegada_na_requisicao = np.zeros(len(ordem_requisicoes))
+            for j in range(len(ordem_requisicoes)):
+                if t + tempo_ate_requisicao[j] <= dados.e[ordem_requisicoes[j]-1]:
+                    chegada_na_requisicao[j] = dados.e[ordem_requisicoes[j]-1]
+                else:
+                    chegada_na_requisicao[j] = t + tempo_ate_requisicao[j]
+            
+            duracao_de_viagem_em_caso_de_volta_para_garagem = np.zeros(len(ordem_requisicoes))
+            for j in range(len(ordem_requisicoes)):
+                if i != 0:
+                    intervalo = chegada_na_requisicao[j] - t
+                    duracao_de_viagem_em_caso_de_volta_para_garagem[j] = duracao_viagem + intervalo + dados.s[ordem_requisicoes[j]] + dados.T[ordem_requisicoes[j], 0]
+                else:
+                    duracao_de_viagem_em_caso_de_volta_para_garagem[j] = tempo_ate_requisicao[j] + dados.s[ordem_requisicoes[j]] + dados.T[ordem_requisicoes[j], 0]
 
-            if v == 1 and k == 2 and duracao_viagem > 150:
-                print("debug")
-
-            # Eu tenho que escolher uma requisição que:
-            # 1. Ainda não foi atendida
-            # 2. O instante atual t não ultrapassa o fim da janela de tempo da requisição
-            # 3. A duração da viagem até essa requisição mais o tempo para voltar para a garagem não ultrapassa Tmax
             for j in range(len(ordem_requisicoes)):
 
                 if ((chegada_na_requisicao[j] <= dados.l[ordem_requisicoes[j]-1]) 
@@ -63,8 +60,7 @@ for k in K:
                          <= dados.Tmax)):
 
                     rota.append(int(ordem_requisicoes[j]))
-                    # O tempo de chegada na nova requisição é ou o tempo de chegada ou o início da janela de tempo, o que for maior
-                    chegada_oficial = float(max(chegada_na_requisicao[j], dados.e[ordem_requisicoes[j]-1]))
+                    chegada_oficial = float(chegada_na_requisicao[j])
                     
                     if i == 0:
                         chegada.append(float(chegada_oficial - tempo_ate_requisicao[j]))
@@ -80,8 +76,9 @@ for k in K:
                 elif j == ordem_requisicoes.size - 1 and uma_requisicao_foi_atendida:
                     cabe_mais_requisicoes = False
                     rota.append(0)
-                    t += dados.T[rota[-1], 0] + dados.s[rota[-1]]
+                    t += dados.s[rota[-2]] + dados.T[rota[-2], 0] 
                     chegada.append(float(t))
+                    duracao_viagem = float(chegada[-1] - chegada[0])
                 elif j == ordem_requisicoes.size - 1 and not uma_requisicao_foi_atendida:
                     cabe_mais_requisicoes = False
         
@@ -97,6 +94,7 @@ for k in K:
 
         if numero_requisicoes_nao_atendidas == 0:
             break
+
     if numero_requisicoes_nao_atendidas == 0:
         break
         
