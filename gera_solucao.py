@@ -218,7 +218,7 @@ if resposta.lower() == 's':
     print("RESOLVENDO COM MÉTODO EXATO")
     print("-" * 70)
     
-    metodo = Exato()
+    metodo = Exato(limite_tempo=4*3600)
     solucao_otima = metodo.resolve(dados, solucao_inicial=solucao)
     
     print("\n" + "-" * 70)
@@ -229,6 +229,8 @@ if resposta.lower() == 's':
     if solucao.fx and solucao_otima.fx:
         gap = ((solucao.fx - solucao_otima.fx) / solucao_otima.fx) * 100
         print(f"\nGap entre heurística e ótimo: {gap:.2f}%")
+    
+    solucao_otima.salvar("otimo_media.json")
 
 print("\n" + "=" * 70)
 print("EXECUÇÃO CONCLUÍDA")
