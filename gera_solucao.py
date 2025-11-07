@@ -32,7 +32,7 @@ print("GERADOR DE SOLUÇÃO HEURÍSTICA - PROBLEMA DE EMBARQUE REMOTO")
 print("=" * 70)
 
 # Carrega instância do problema
-ARQUIVO_INSTANCIA = "./dados/media.json"
+ARQUIVO_INSTANCIA = "./dados/grande.json"
 print(f"\nCarregando instância: {ARQUIVO_INSTANCIA}")
 dados = carrega_dados_json(ARQUIVO_INSTANCIA)
 print(f"✓ Instância carregada: {dados.n} requisições, {dados.K} ônibus, {dados.r} viagens/ônibus")
@@ -218,7 +218,7 @@ if resposta.lower() == 's':
     print("RESOLVENDO COM MÉTODO EXATO")
     print("-" * 70)
     
-    metodo = Exato(limite_tempo=4*3600)
+    metodo = Exato(limite_tempo=12*3600)
     solucao_otima = metodo.resolve(dados, solucao_inicial=solucao)
     
     print("\n" + "-" * 70)
@@ -230,7 +230,7 @@ if resposta.lower() == 's':
         gap = ((solucao.fx - solucao_otima.fx) / solucao_otima.fx) * 100
         print(f"\nGap entre heurística e ótimo: {gap:.2f}%")
     
-    solucao_otima.salvar("otimo_media.json")
+    solucao_otima.salvar("otimo_grande.json")
 
 print("\n" + "=" * 70)
 print("EXECUÇÃO CONCLUÍDA")
