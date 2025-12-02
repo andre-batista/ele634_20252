@@ -1,5 +1,5 @@
-from exemplo_prof.dados import Dados
-from exemplo_prof.solucao import Solucao
+from dados import Dados
+from solucao import Solucao
 
 def atendimento_requisicoes(solucao: Solucao, dados: Dados):
   # cada requisição deve ser atendida exatamente uma vez

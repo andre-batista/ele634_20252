@@ -323,3 +323,39 @@ class TwoOpt(Neighborhood):
             solution_copy.recalculate_all()
         
         return solution_copy
+    
+class InterTripSwap(Neighborhood):
+    def apply(self, solution: Solution, iterations: int) -> Solution:
+        solution_copy = solution.copy()
+        applied_count = 0
+        max_attempts = iterations * 10
+
+        while applied_count < iterations and max_attempts > 0:
+            max_attempts -= 1
+            indices1 = self._select_random_trip(solution_copy)
+            if not indices1:
+                continue
+            bus1_idx, trip1_idx = indices1
+            trip1 = solution_copy.routes[bus1_idx][trip1_idx]
+            req1_idx = self._select_one_request_from_trip(trip1)
+            if req1_idx is None:
+                continue
+
+            indices2 = self._select_random_trip(solution_copy)
+            if not indices2:
+                continue
+            bus2_idx, trip2_idx = indices2
+            trip2 = solution_copy.routes[bus2_idx][trip2_idx]
+            req2_idx = self._select_one_request_from_trip(trip2)
+            if req2_idx is None:
+                continue
+
+            if bus1_idx == bus2_idx and trip1_idx == trip2_idx and req1_idx == req2_idx:
+                continue
+
+            trip1[req1_idx], trip2[req2_idx] = trip2[req2_idx], trip1[req1_idx]
+            applied_count += 1
+
+        if applied_count > 0:
+            solution_copy.recalculate_all()
+        return solution_copy
