@@ -118,7 +118,8 @@ class Solution:
                 self._apply_move(final_move)
             else:
                 # Isso não deveria acontecer se a criação de nova viagem for sempre possível
-                print(f"⚠️ ERRO: Não foi possível inserir requisição {req}")
+                # print(f"⚠️ ERRO: Não foi possível inserir requisição {req}")
+                pass
         
         # Recalcula e finaliza
         self.recalculate_all()

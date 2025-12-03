@@ -101,14 +101,16 @@ def resolva(dados: Dados, numero_avaliacoes: int) -> SolucaoFinal:
     
     if not melhor_solucao_vns:
         # Adiciona um log para sabermos se o VNS falhou
-        print("[DEBUG] VNS falhou em retornar uma solução.")
+        # print("[DEBUG] VNS falhou em retornar uma solução.")
         return SolucaoFinal()
 
     # Log para nosso 'double-check' interno
     if not melhor_solucao_vns.is_valid:
-        print(f"[DEBUG] VNS está retornando uma solução que ele mesmo considera INVÁLIDA! (Violações: {melhor_solucao_vns.violations})")
+        # print(f"[DEBUG] VNS está retornando uma solução que ele mesmo considera INVÁLIDA! (Violações: {melhor_solucao_vns.violations})")
+        pass
     else:
-        print(f"[DEBUG] VNS retornou uma solução que ele considera VÁLIDA.")
+        # print(f"[DEBUG] VNS retornou uma solução que ele considera VÁLIDA.")
+        pass
 
     solucao_formatada = _traduzir_solucao(melhor_solucao_vns, dados)
     

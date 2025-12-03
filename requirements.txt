@@ -7,3 +7,5 @@ scipy
 pandas
 seaborn
 sortedcontainers
+joblib
+gdown

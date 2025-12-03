@@ -104,11 +104,11 @@ class VariableNeighborhoodSearch():
         improvements_count = 0
 
         if not quiet:
-            print(">>> Iniciando execução do VNS...")
+            #print(">>> Iniciando execução do VNS...")
             initial_solution.validate()
-            print("\n--- Solução Inicial ---")
-            print(initial_solution.summary())
-            print("Executando busca local inicial...")
+            #print("\n--- Solução Inicial ---")
+            #print(initial_solution.summary())
+            #print("Executando busca local inicial...")
 
         # Busca local inicial
         current_solution = self.local_search(initial_solution)
@@ -116,7 +116,7 @@ class VariableNeighborhoodSearch():
         
         if not quiet:
             valid_str = "✓ Sim" if self.best_solution.is_valid else "✗ Não"
-            print(f"Custo após busca local inicial: {self.best_solution.total_cost:,.2f} (Válida: {valid_str})")
+            #print(f"Custo após busca local inicial: {self.best_solution.total_cost:,.2f} (Válida: {valid_str})")
 
         k_max = len(self.shake_neighborhoods)
         k = 0
@@ -136,9 +136,9 @@ class VariableNeighborhoodSearch():
             
             if not quiet:
                 valid_str = "✓" if self.best_solution.is_valid else "✗"
-                print(f"\rProgresso: {self.evaluations}/{self.max_evaluations} | "
-                      f"Melhor: {self.best_solution.total_cost:,.2f} ({valid_str}) | "
-                      f"Melhorias: {improvements_count} | k={k+1}/{k_max}", end="")
+                #print(f"\rProgresso: {self.evaluations}/{self.max_evaluations} | "
+                    #   f"Melhor: {self.best_solution.total_cost:,.2f} ({valid_str}) | "
+                    #   f"Melhorias: {improvements_count} | k={k+1}/{k_max}", end="")
 
             # 1. Shake (usa a lista de shake)
             shaken_solution = self.shake(current_solution, k)
@@ -169,8 +169,8 @@ class VariableNeighborhoodSearch():
                     improvements_count += 1
                     if not quiet:
                         valid_str = "✓ Sim" if self.best_solution.is_valid else "✗ Não"
-                        print(f"\n✨ NOVA MELHOR SOLUÇÃO (VNS): {self.best_solution.total_cost:,.2f} "
-                              f"(Válida: {valid_str}) (Avaliação {self.evaluations})")
+                        #print(f"\n✨ NOVA MELHOR SOLUÇÃO (VNS): {self.best_solution.total_cost:,.2f} "
+                            #   f"(Válida: {valid_str}) (Avaliação {self.evaluations})")
             else:
                 entry['decision'] = 'Rejected_Increment_K'
                 entry['new_k'] = k + 1
@@ -183,7 +183,8 @@ class VariableNeighborhoodSearch():
 
         runtime = time.time() - start_time
         if not quiet:
-            print(f"\n\n>>> Execução VNS finalizada em {runtime:.2f} segundos.")
+            #print(f"\n\n>>> Execução VNS finalizada em {runtime:.2f} segundos.")
+            pass
         
         if self.best_solution:
             self.best_solution.validate()

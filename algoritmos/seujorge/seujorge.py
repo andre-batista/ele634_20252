@@ -30,7 +30,7 @@ def resolva(dados: Dados, numero_avaliacoes: int) -> Solucao:
     Returns:
         Solucao: A melhor solução encontrada pelo AG.
     """
-    print(f"Iniciando GA com orçamento de {numero_avaliacoes} avaliações...")
+    # print(f"Iniciando GA com orçamento de {numero_avaliacoes} avaliações...")
     
     # --- Hiperparâmetros do Algoritmo Genético ---
     # Como calibrar esses valores?
@@ -56,7 +56,7 @@ def resolva(dados: Dados, numero_avaliacoes: int) -> Solucao:
     sol = ga.executa()
     
     tempo_total = time() - tic
-    print(f"...GA concluído em {tempo_total:.2f}s. Avaliações usadas: {ga.avaliacoes}")
+    # print(f"...GA concluído em {tempo_total:.2f}s. Avaliações usadas: {ga.avaliacoes}")
     
     return sol
 

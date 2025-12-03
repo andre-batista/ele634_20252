@@ -76,10 +76,10 @@ def resolva(dados: Dados, numero_avaliacoes: int) -> Solucao:
     )
     inst = Instance.from_andre(raw)
 
-    print(f"[CHK] n={inst.n}, K={inst.K}, r={inst.r}, Tmax={inst.Tmax}")
-    print(f"[CHK] s0={inst.s[0]}  s[1..3]={inst.s[1:4]}")
-    print(f"[CHK] e[1..3]={inst.e[:3] if inst.e is not None else None}")
-    print(f"[CHK] l[1..3]={inst.l[:3] if inst.l is not None else None}")
+    #print(f"[CHK] n={inst.n}, K={inst.K}, r={inst.r}, Tmax={inst.Tmax}")
+    #print(f"[CHK] s0={inst.s[0]}  s[1..3]={inst.s[1:4]}")
+    #print(f"[CHK] e[1..3]={inst.e[:3] if inst.e is not None else None}")
+    #print(f"[CHK] l[1..3]={inst.l[:3] if inst.l is not None else None}")
 
     
     # ========================================================================
@@ -110,7 +110,7 @@ def resolva(dados: Dados, numero_avaliacoes: int) -> Solucao:
         alpha=alpha,
         counter=counter_grasp,
         use_time_windows=True,  # ordenar por janelas de tempo
-        verbose=False  # desativar prints para não poluir saída
+        verbose=False  # desativar #prints para não poluir saída
     )
     
     # Tentar reparar nós não atendidos (se houver budget)
@@ -139,7 +139,7 @@ def resolva(dados: Dados, numero_avaliacoes: int) -> Solucao:
         counter=counter_vns,
         k_max=k_max,
         local_search_iters=local_search_iters,
-        verbose=False  # desativar prints
+        verbose=False  # desativar #prints
     )
     '''# ========================================================================
     # 4. FASE DE MELHORIA: VNS (DESLIGADA)
@@ -256,18 +256,18 @@ def resolva_verbose(dados: Dados, numero_avaliacoes: int) -> tuple:
     grasp_budget = max(1, numero_avaliacoes // 5)
     vns_budget = numero_avaliacoes - grasp_budget
     
-    print("=" * 70)
-    print(f"GRASP + VNS - Problema de Roteamento de Ônibus")
-    print("=" * 70)
-    print(f"Instância: n={inst.n}, K={inst.K}, r={inst.r}, Tmax={inst.Tmax:.1f}")
-    print(f"Budget total: {numero_avaliacoes} avaliações")
-    print(f"  - GRASP: {grasp_budget} avaliações ({grasp_budget/numero_avaliacoes*100:.1f}%)")
-    print(f"  - VNS: {vns_budget} avaliações ({vns_budget/numero_avaliacoes*100:.1f}%)")
-    print("=" * 70)
+    #print("=" * 70)
+    #print(f"GRASP + VNS - Problema de Roteamento de Ônibus")
+    #print("=" * 70)
+    #print(f"Instância: n={inst.n}, K={inst.K}, r={inst.r}, Tmax={inst.Tmax:.1f}")
+    #print(f"Budget total: {numero_avaliacoes} avaliações")
+    #print(f"  - GRASP: {grasp_budget} avaliações ({grasp_budget/numero_avaliacoes*100:.1f}%)")
+    #print(f"  - VNS: {vns_budget} avaliações ({vns_budget/numero_avaliacoes*100:.1f}%)")
+    #print("=" * 70)
     
     # GRASP
-    print("\n[FASE 1] Construção de Solução Inicial (GRASP)")
-    print("-" * 70)
+    #print("\n[FASE 1] Construção de Solução Inicial (GRASP)")
+    #print("-" * 70)
     counter_grasp = EvalCounter(limit=grasp_budget)
     n_grasp_iterations = min(10, grasp_budget // 10)
     
@@ -281,24 +281,24 @@ def resolva_verbose(dados: Dados, numero_avaliacoes: int) -> tuple:
     )
     
     stats_initial = solution_stats(sol_initial, inst)
-    print(f"\nSolução inicial GRASP:")
-    print(f"  Custo: {stats_initial['custo_total']:.2f}")
-    print(f"  Cobertura: {stats_initial['requisicoes_atendidas']}/{stats_initial['requisicoes_total']} "
-          f"({stats_initial['cobertura']*100:.1f}%)")
-    print(f"  Viagens: {stats_initial['num_viagens']}")
-    print(f"  Avaliações usadas: {counter_grasp.count}/{counter_grasp.limit}")
+    #print(f"\nSolução inicial GRASP:")
+    #print(f"  Custo: {stats_initial['custo_total']:.2f}")
+    #print(f"  Cobertura: {stats_initial['requisicoes_atendidas']}/{stats_initial['requisicoes_total']} "
+        #   f"({stats_initial['cobertura']*100:.1f}%)")
+    #print(f"  Viagens: {stats_initial['num_viagens']}")
+    #print(f"  Avaliações usadas: {counter_grasp.count}/{counter_grasp.limit}")
     
     # Reparo
     if counter_grasp.count < counter_grasp.limit and stats_initial['cobertura'] < 1.0:
-        print("\n[REPARO] Tentando adicionar requisições faltantes...")
+        #print("\n[REPARO] Tentando adicionar requisições faltantes...")
         sol_initial = repair_missing_nodes(sol_initial, inst, counter_grasp, max_attempts=5)
         stats_repaired = solution_stats(sol_initial, inst)
-        print(f"  Após reparo: {stats_repaired['requisicoes_atendidas']}/{stats_repaired['requisicoes_total']} "
-              f"requisições atendidas")
+        #print(f"  Após reparo: {stats_repaired['requisicoes_atendidas']}/{stats_repaired['requisicoes_total']} "
+            #   f"requisições atendidas")
     
     # VNS
-    print("\n[FASE 2] Melhoria com VNS")
-    print("-" * 70)
+    #print("\n[FASE 2] Melhoria com VNS")
+    #print("-" * 70)
     counter_vns = EvalCounter(limit=vns_budget)
     counter_vns.best_fx = sol_initial.total_cost()
     counter_vns.best_sol = sol_initial.copy()
@@ -315,15 +315,15 @@ def resolva_verbose(dados: Dados, numero_avaliacoes: int) -> tuple:
     stats_final = solution_stats(sol_final, inst)
     
     # Resumo
-    print("\n" + "=" * 70)
-    print("RESUMO FINAL")
-    print("=" * 70)
-    print(f"Custo inicial (GRASP): {stats_initial['custo_total']:.2f}")
-    print(f"Custo final (VNS):     {stats_final['custo_total']:.2f}")
-    print(f"Melhoria:              {stats_initial['custo_total'] - stats_final['custo_total']:.2f} "
-          f"({(1 - stats_final['custo_total']/stats_initial['custo_total'])*100:.2f}%)")
-    print(f"Avaliações totais:     {counter_grasp.count + counter_vns.count}/{numero_avaliacoes}")
-    print("=" * 70)
+    #print("\n" + "=" * 70)
+    #print("RESUMO FINAL")
+    #print("=" * 70)
+    #print(f"Custo inicial (GRASP): {stats_initial['custo_total']:.2f}")
+    #print(f"Custo final (VNS):     {stats_final['custo_total']:.2f}")
+    #print(f"Melhoria:              {stats_initial['custo_total'] - stats_final['custo_total']:.2f} "
+          #   f"({(1 - stats_final['custo_total']/stats_initial['custo_total'])*100:.2f}%)")
+    #print(f"Avaliações totais:     {counter_grasp.count + counter_vns.count}/{numero_avaliacoes}")
+    #print("=" * 70)
     
     # Melhor solução
     if counter_vns.best_fx < counter_grasp.best_fx:
