@@ -369,7 +369,7 @@ class Solucao:
         for k in K:
             for v in V:
                 
-                if v not in self.rota[k]:
+                if v not in self.rota[k] or self.rota[k][v] == []:
                     continue
 
                 requisicoes = self.rota[k][v]
@@ -473,7 +473,7 @@ class Solucao:
         except IOError as e:
             print(f"Erro ao salvar a solução em JSON: {e}")
 
-    def carregar(self, nome_arquivo: str) -> None:
+    def carregar(self, nome_arquivo: str, verbose: bool=False) -> None:
         """
         Carrega uma solução previamente salva de um arquivo JSON.
         
@@ -542,7 +542,8 @@ class Solucao:
                     # Carregar tempos de chegada
                     self.chegada[k][v] = viagem_data.get("chegada", [])
             
-            print(f"Solução carregada com sucesso de {nome_arquivo}")
+            if verbose:
+                print(f"Solução carregada com sucesso de {nome_arquivo}")
             
         except FileNotFoundError:
             print(f"Erro: Arquivo '{nome_arquivo}' não encontrado.")
