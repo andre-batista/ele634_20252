@@ -297,7 +297,7 @@ class CacheLP:
         if len(self._data) > self.max_size:
             self._data.popitem(last=False)
 
-random.seed(1)
+# random.seed(1)
 _CACHE_LP = CacheLP(max_size=1e6, decimals=8)
 
 def cria_matriz_onibus(rotas_onibus, dados):

@@ -176,7 +176,10 @@ class MACS:
 
     onibus_possiveis = list(distribuicoes.keys())
     pesos = list(vontade_onibus.values())
-    onibus_escolhido = random.choices(onibus_possiveis, weights=pesos, k=1)[0]
+    try:
+      onibus_escolhido = random.choices(onibus_possiveis, weights=pesos, k=1)[0]
+    except:
+      onibus_escolhido = random.choice(onibus_possiveis)
 
     return onibus_escolhido
   
@@ -191,7 +194,10 @@ class MACS:
                               (self.feromonios_rota[i][j] ** alpha))
 
     pesos = list(vontade_rota.values())
-    Requisicao_j = random.choices(distribuicao, weights=pesos, k=1)[0]
+    try:
+      Requisicao_j = random.choices(distribuicao, weights=pesos, k=1)[0]
+    except:
+      Requisicao_j = random.choice(distribuicao)
 
     return Requisicao_j
   

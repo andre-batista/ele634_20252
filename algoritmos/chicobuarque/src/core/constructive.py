@@ -240,8 +240,8 @@ def grasp_construction(inst: Instance, alpha: float, counter: EvalCounter,
     Constrói uma solução usando GRASP.
     Conta APENAS UMA avaliação ao FINAL da construção.
     """
-    if seed is not None:
-        random.seed(seed)
+    # if seed is not None:
+    #     random.seed(seed)
 
     sol = Solution.new_empty(inst)
 

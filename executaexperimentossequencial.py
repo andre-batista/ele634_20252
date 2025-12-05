@@ -1,7 +1,6 @@
 import sys
 import os
 from dados import carrega_dados_json
-import joblib
 
 sys.path.insert(1, './algoritmos/alcione')
 sys.path.insert(1, './algoritmos/cartola')
@@ -16,12 +15,12 @@ from algoritmos.djavan.djavan import resolva as resolva_djavan
 from algoritmos.seujorge.seujorge import resolva as resolva_seujorge
     
 # Carrega instância do problema
-instancia = 'media'  # Opções: 'pequena', 'media', 'grande', 'rush'
-num_avaliacoes = 48240 # 2100, 48240, 118800, 118800
+instancia = ['grande']  # Opções: 'pequena', 'media', 'grande', 'rush'
+num_avaliacoes = [118800] # 2100, 48240, 118800, 118800
 num_execucoes = 30
-grupos = ["cartola", "chicobuarque", "djavan", "seujorge"]
+grupos = ["alcione"]
 
-dados = carrega_dados_json(f'./dados/{instancia}.json')
+
 
 def executar_algoritmo(execucao, grupo, dados, num_avaliacoes, instancia):
     if grupo == "alcione":
@@ -34,21 +33,28 @@ def executar_algoritmo(execucao, grupo, dados, num_avaliacoes, instancia):
         solucao = resolva_djavan(dados, numero_avaliacoes=num_avaliacoes)
     elif grupo == "seujorge":
         solucao = resolva_seujorge(dados, numero_avaliacoes=num_avaliacoes)
-    
-    solucao.salvar("./resultados/{}/{}/s{}.json".format(instancia, grupo, execucao + 1))
+
     return solucao
 
-for grupo in grupos:
+for instancia, num_avaliacoes in zip(instancia, num_avaliacoes):
 
-    print(f'Executando grupo: {grupo}')
+    dados = carrega_dados_json(f'./dados/{instancia}.json')
 
-    os.makedirs(f'./resultados/{instancia}/{grupo}', exist_ok=True)
+    print(f'Instância {instancia} carregada com sucesso.')
 
-    joblib.Parallel(n_jobs=-1)(
-        joblib.delayed(executar_algoritmo)(execucao, grupo, dados, 
-                                           num_avaliacoes, instancia)
-        for execucao in range(num_execucoes)
-    )
-    
+    for grupo in grupos:
+
+        print(f'Executando grupo: {grupo}')
+
+        os.makedirs(f'./resultados/{instancia}/{grupo}', exist_ok=True)
+
+        # Executar sequencialmente
+        for execucao in range(num_execucoes):
+            print(f'  Execução {execucao + 1}/{num_execucoes}')
+            solucao = executar_algoritmo(execucao, grupo, dados, num_avaliacoes, instancia)
+            solucao.salvar("./resultados/{}/{}/s{}.json".format(instancia, grupo, execucao + 1))
+        
+        print(f'✅ Grupo {grupo} concluído!\n')
+        
     
     
